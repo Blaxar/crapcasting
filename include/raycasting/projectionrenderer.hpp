@@ -18,12 +18,14 @@ class ProjectionRenderer{
         
     cv::Mat * projection;
     raycasting::Player * player;
-    std::vector< std::pair<raycasting::Point, raycasting::Point> > * walls;
+    std::vector< std::pair<raycasting::Point, raycasting::Point> > walls;
     
     
     public:
     
-    ProjectionRenderer(cv::Mat * projection, raycasting::Player * player, std::vector< std::pair<raycasting::Point, raycasting::Point> > * walls);
+    ProjectionRenderer(cv::Mat* projection,
+                       raycasting::Player* player,
+                       std::vector< std::pair<raycasting::Point, raycasting::Point> >& walls);
     
     void render();
     

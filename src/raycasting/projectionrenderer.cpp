@@ -1,12 +1,13 @@
 #include <raycasting/projectionrenderer.hpp>
 #include <iostream>
-#include <stdlib.h> 
+#include <stdlib.h>
+#include <opencv2/imgproc.hpp>
 
 using namespace cv;
 using namespace std;
 
 ProjectionRenderer::ProjectionRenderer(cv::Mat* projection, raycasting::Player * player,
-        std::vector<std::pair<raycasting::Point, raycasting::Point> > * walls){
+        std::vector<std::pair<raycasting::Point, raycasting::Point> > &walls){
     
     this->projection = projection;
     this->player = player;
@@ -26,9 +27,9 @@ void ProjectionRenderer::render(){
 
 void ProjectionRenderer::rendercol(int col){
     
-    for(int wall = 0; wall < walls->size(); wall++){
+    for(auto &wall : walls){
         
-        float walldist = getwalldist(walls->at(wall), col);
+        float walldist = getwalldist(wall, col);
         float eyesource = 20;
         float refheight = this->projection->rows;
         

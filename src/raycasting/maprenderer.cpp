@@ -1,9 +1,10 @@
 #include <raycasting/maprenderer.hpp>
 #include <math.h>
+#include <opencv2/imgproc.hpp>
 
 using namespace cv;
 
-MapRenderer::MapRenderer(cv::Mat* map, raycasting::Player* player, std::vector<std::pair<raycasting::Point, raycasting::Point> > * walls){
+MapRenderer::MapRenderer(cv::Mat* map, raycasting::Player* player, std::vector<std::pair<raycasting::Point, raycasting::Point> >& walls){
     
     this->map = map;
     this->player = player;
@@ -51,11 +52,11 @@ void MapRenderer::render(){
         
     }
     
-    for(int i = 0; i < this->walls->size(); i++){
-        
+    for(auto &wall : walls){
+
         cv::line((*this->map),
-                Point(this->walls->at(i).first.x, this->walls->at(i).first.y),
-                Point(this->walls->at(i).second.x, this->walls->at(i).second.y),
+                Point(wall.first.x, wall.first.y),
+                Point(wall.second.x, wall.second.y),
                 Scalar(255, 255, 255),1, 8, 0);
         
     }

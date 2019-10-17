@@ -10,7 +10,7 @@
 
 #include "player.hpp"
 #include "point.hpp"
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 
 class MapRenderer{
     
@@ -18,11 +18,11 @@ class MapRenderer{
         
     cv::Mat * map;
     raycasting::Player * player;
-    std::vector< std::pair<raycasting::Point, raycasting::Point> > * walls;
+    std::vector< std::pair<raycasting::Point, raycasting::Point> > walls;
     
     public:
     
-    MapRenderer(cv::Mat * map, raycasting::Player * player, std::vector< std::pair<raycasting::Point, raycasting::Point> > * walls);
+    MapRenderer(cv::Mat * map, raycasting::Player * player, std::vector< std::pair<raycasting::Point, raycasting::Point> > &walls);
     
     void render();
     

@@ -43,8 +43,8 @@ int main(int argc, char** argv) {
     Mat map = Mat::zeros(map_height, map_width, CV_8UC3);
     Mat viewpoint = Mat::zeros(projection_height, projection_width, CV_8UC3);
     
-    MapRenderer mapr(&map, player, &walls);
-    ProjectionRenderer projr(&viewpoint, player, &walls);
+    MapRenderer mapr(&map, player, walls);
+    ProjectionRenderer projr(&viewpoint, player, walls);
     
     char key = 0;
     
