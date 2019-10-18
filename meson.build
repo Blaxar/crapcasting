@@ -5,7 +5,7 @@ opencv_dep = dependency('opencv4')
 caca_dep = dependency('caca')
 
 crapcasting_sources = files(['src/raycasting/maprenderer.cpp',
-                             'src/raycasting/projectionrenderer.cpp'])
+                             'src/raycasting/CvProjectionRenderer.cpp'])
                                                               
 crapcasting = shared_library('crapcasting', [crapcasting_sources],
                               dependencies: [opencv_dep, caca_dep],

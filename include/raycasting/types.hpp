@@ -26,6 +26,11 @@
 
 namespace raycasting {
 
+    typedef struct {
+        unsigned short int width;
+        unsigned short int height;
+    } DisplaySize;
+
     struct Point {
 
         Point(){ x=0; y=0;};

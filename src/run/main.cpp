@@ -24,7 +24,7 @@
 #include <opencv2/video/video.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <raycasting/maprenderer.hpp>
-#include <raycasting/projectionrenderer.hpp>
+#include <raycasting/CvProjectionRenderer.hpp>
 #include <cstdlib>
 #include <time.h>
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     Mat viewpoint = Mat::zeros(projection_height, projection_width, CV_8UC3);
 
     MapRenderer mapr(&map, player, walls);
-    ProjectionRenderer projr(&viewpoint, player, walls);
+    CvProjectionRenderer projr(&viewpoint, player, walls, DEFAULT_PROJECTION_SIZE);
 
     char key = 0;
 
@@ -88,7 +88,7 @@ void update_player(raycasting::Player * player, char key){
     switch(key){
 
         case 'z': //forward "z"
-        {    
+        {
             raycasting::Point direction1(0,0.5);
 
             float dirx1 = cos(player->orientation)*direction1.x - sin(player->orientation)*direction1.y + player->position.x;
@@ -96,11 +96,11 @@ void update_player(raycasting::Player * player, char key){
 
             player->position.x = dirx1;
             player->position.y = diry1;
-        }             
+        }
         break;
 
         case 's': //backward "s"
-        {    
+        {
             raycasting::Point direction2(0,-0.5);
 
             float dirx2 = cos(player->orientation)*direction2.x - sin(player->orientation)*direction2.y + player->position.x;

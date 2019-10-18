@@ -18,35 +18,34 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef PROJECTIONRENDERER_HPP
-#define	PROJECTIONRENDERER_HPP
+#ifndef CVPROJECTIONRENDERER_HPP
+#define	CVPROJECTIONRENDERER_HPP
 
 #include <opencv2/core/core.hpp>
-#include "types.hpp"
+#include "ProjectionRenderer.hpp"
 
-class ProjectionRenderer{
-    
+class CvProjectionRenderer: public virtual ProjectionRenderer {
+
     private:
-        
+
     cv::Mat * projection;
-    raycasting::Player * player;
-    std::vector< std::pair<raycasting::Point, raycasting::Point> > walls;
-    
-    
+
+
     public:
-    
-    ProjectionRenderer(cv::Mat* projection,
-                       raycasting::Player* player,
-                       std::vector< std::pair<raycasting::Point, raycasting::Point> >& walls);
-    
-    void render();
-    
+
+    CvProjectionRenderer(cv::Mat* projection,
+                         raycasting::Player* player,
+                         std::vector< std::pair<raycasting::Point, raycasting::Point> >& walls,
+                         raycasting::DisplaySize ds = DEFAULT_PROJECTION_SIZE);
+
+    virtual void render();
+
     void rendercol(int col);
-    
+
     float getwalldist(std::pair<raycasting::Point, raycasting::Point> wall, int col);
-    
-    ~ProjectionRenderer();
+
+    virtual ~CvProjectionRenderer();
 
 };    
 
-#endif	/* PROJECTIONRENDERER_HPP */
+#endif	/* CVPROJECTIONRENDERER_HPP */
