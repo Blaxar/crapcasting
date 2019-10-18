@@ -18,30 +18,35 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CVPROJECTIONRENDERER_HPP
-#define	CVPROJECTIONRENDERER_HPP
+#ifndef CACAPROJECTIONRENDERER_HPP
+#define	CACAPROJECTIONRENDERER_HPP
 
-#include <opencv2/core/core.hpp>
+extern "C" {
+
+#include <caca.h>
+
+}
+
 #include "ProjectionRenderer.hpp"
 
-class CvProjectionRenderer: public virtual ProjectionRenderer {
+class CacaProjectionRenderer: public virtual ProjectionRenderer {
 
     private:
 
-    cv::Mat * projection;
-
+    caca_display_t *dp;
+    caca_canvas_t *cv;
 
     public:
 
-    CvProjectionRenderer(cv::Mat* projection,
-                         raycasting::Player* player,
-                         std::vector< std::pair<raycasting::Point, raycasting::Point> >& walls,
-                         raycasting::DisplaySize ds = DEFAULT_PROJECTION_SIZE);
+    CacaProjectionRenderer(caca_display_t* d, caca_canvas_t* c,
+                           raycasting::Player* player,
+                           std::vector< std::pair<raycasting::Point, raycasting::Point> >& walls,
+                           raycasting::DisplaySize ds = DEFAULT_PROJECTION_SIZE);
 
     void rendercol(int col);
 
-    virtual ~CvProjectionRenderer();
+    virtual ~CacaProjectionRenderer();
 
 };    
 
-#endif	/* CVPROJECTIONRENDERER_HPP */
+#endif	/* CACAPROJECTIONRENDERER_HPP */

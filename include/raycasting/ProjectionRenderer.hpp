@@ -49,7 +49,7 @@ class ProjectionRenderer{
 
     virtual void rendercol(int col) {}
 
-    float getwalldist(std::pair<raycasting::Point, raycasting::Point> wall, int col);
+    float getWallDist(std::pair<raycasting::Point, raycasting::Point> wall, int col);
 
     virtual ~ProjectionRenderer() {}
 

@@ -25,6 +25,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <raycasting/maprenderer.hpp>
 #include <raycasting/CvProjectionRenderer.hpp>
+#include <raycasting/CacaProjectionRenderer.hpp>
 #include <cstdlib>
 #include <time.h>
 
@@ -35,8 +36,8 @@ void update_player(raycasting::Player * player, char key);
 
 int main(int argc, char** argv) {
 
-    int projection_width = 800;
-    int projection_height = 600;
+    raycasting::DisplaySize cv_display_size = DEFAULT_PROJECTION_SIZE;
+    raycasting::DisplaySize caca_display_size = {cv_display_size.width/4, cv_display_size.height/8};
     int map_width = 500;
     int map_height = 500;
     float frame_interval_ms = 1000.0/60.0;
@@ -54,20 +55,43 @@ int main(int argc, char** argv) {
     walls.push_back(pair<raycasting::Point,raycasting::Point>(raycasting::Point(150,350), raycasting::Point(150,150)));
 
     Mat map = Mat::zeros(map_height, map_width, CV_8UC3);
-    Mat viewpoint = Mat::zeros(projection_height, projection_width, CV_8UC3);
+    Mat viewpoint = Mat::zeros(cv_display_size.height, cv_display_size.width, CV_8UC3);
+
+    caca_canvas_t *caca_cv;
+    caca_display_t *caca_dp;
+
+    caca_cv = caca_create_canvas(caca_display_size.width, caca_display_size.height);
+    if(caca_cv == NULL)
+    {
+        printf("Failed to create canvas\n");
+        return 1;
+    }
+
+    caca_dp = caca_create_display(caca_cv);
+    if(caca_dp == NULL)
+    {
+        printf("Failed to create display\n");
+        return 1;
+    }
 
     MapRenderer mapr(&map, player, walls);
-    CvProjectionRenderer projr(&viewpoint, player, walls, DEFAULT_PROJECTION_SIZE);
+    CvProjectionRenderer cv_projr(&viewpoint, player, walls, cv_display_size);
+    CacaProjectionRenderer caca_projr(caca_dp, caca_cv, player, walls, caca_display_size);
 
     char key = 0;
 
     while(key != 27){ //escape key
 
         map = Mat::zeros(map_height, map_width, CV_8UC3);
-        viewpoint = Mat::zeros(projection_height, projection_width, CV_8UC3);
+        viewpoint = Mat::zeros(cv_display_size.height, cv_display_size.width, CV_8UC3);
+        caca_set_color_ansi(caca_cv, CACA_BLACK, CACA_BLACK);
+        caca_clear_canvas(caca_cv);
 
         mapr.render();
-        projr.render();
+        cv_projr.render();
+        caca_projr.render();
+
+        caca_refresh_display(caca_dp);
 
         imshow("viewpoint", viewpoint);
         flip(map, map, 0);
@@ -78,6 +102,9 @@ int main(int argc, char** argv) {
         update_player(player, key);
 
     }
+
+    caca_free_display(caca_dp);
+    caca_free_canvas(caca_cv);
 
     return 0;
 
