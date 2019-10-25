@@ -21,6 +21,7 @@
 #include <raycasting/CacaProjectionRenderer.hpp>
 #include <iostream>
 #include <stdlib.h>
+#include <float.h>
 
 using namespace cv;
 using namespace std;
@@ -35,7 +36,7 @@ CacaProjectionRenderer::CacaProjectionRenderer(caca_display_t* d, caca_canvas_t*
 
 void CacaProjectionRenderer::rendercol(int col){
 
-    float z = 100000000;
+    float z = FLT_MAX;
 
     for(auto &wall : walls){
 
@@ -43,25 +44,23 @@ void CacaProjectionRenderer::rendercol(int col){
         const float eyesource = 20;
         const float refheight = caca_get_canvas_height(cv);
 
-        //cout << walldist << endl;
-
         if(walldist > 0 && walldist < z){
 
             z = walldist;
-
-            caca_set_color_ansi(cv, CACA_BLACK, CACA_WHITE);
-            double wallheight = (refheight/(double)walldist)*eyesource;
+            
+            double wallheight_halved = (refheight/(double)walldist)*eyesource / 2;
             double integral;
-            double fractional = modf(wallheight, &integral);
-            caca_set_color_ansi(cv, CACA_BLACK, shades[(int)(fractional*4)]);
-            caca_draw_line (cv,
-                            col, (refheight/2) - (wallheight/2),
-                            col, (refheight/2) + (wallheight/2), ' ');
+            double fractional = modf(wallheight_halved, &integral);
+
+            const int y_start = (refheight/2) - integral;
+            const int y_stop = (refheight/2) + integral;
 
             caca_set_color_ansi(cv, CACA_BLACK, CACA_WHITE);
-            caca_draw_line (cv,
-                            col, (refheight/2) - integral/2,
-                            col, (refheight/2) + integral/2, ' '); 	
+            caca_draw_line (cv, col, y_start, col, y_stop, ' ');
+
+            caca_set_color_ansi(cv, CACA_BLACK, shades[(int)(fractional*4)]);
+            caca_put_char (cv, col, y_start - 1, ' ');
+            caca_put_char (cv, col, y_stop + 1, ' ');
 
         }
 
